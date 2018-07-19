@@ -23,8 +23,6 @@ RUN apt-get update -y && apt-get install -y \
 	curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && \
 	pecl install xdebug && \
 	pecl install imagick-3.4.3 && \
-	apt-get remove -y libmagickwand-dev && \
-	apt-get install -y libmagickwand-6.q16-2 && \
 	apt-get autoremove -y && \
 rm -r /var/lib/apt/lists/*
 
@@ -46,7 +44,6 @@ RUN docker-php-ext-configure intl && \
 		intl \
 		gd \
 		ldap \
-		mcrypt \
 		mysqli \
 		pdo \
 		pdo_mysql \
