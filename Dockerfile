@@ -60,7 +60,7 @@ RUN { \
                 echo "  ErrorLog /var/log/apache2/error.log"; \
                 echo "  CustomLog /var/log/apache2/access.log combined"; \
                 echo "  ServerSignature Off"; \
-                echo "  <Directory /var/www/html/public>"; \
+                echo "  <Directory /var/www/html/public/>"; \
                 echo "    Options +FollowSymLinks"; \
                 echo "    Options -ExecCGI -Includes -Indexes"; \
                 echo "    AllowOverride all"; \
