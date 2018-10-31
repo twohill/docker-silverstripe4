@@ -1,30 +1,35 @@
 FROM php:7-apache-stretch
-MAINTAINER Al Twohill "<al@twohill.nz>"
+LABEL author="Al Twohill <al@twohill.nz>"
 
 # Install components
 RUN apt-get update -y && apt-get install -y \
 		curl \
+		g++ \
 		git-core \
 		gzip \
 		libcurl4-openssl-dev \
 		libgd-dev \
 		libldap2-dev \
+		libicu-dev \
+		libmagickwand-dev \
 		libmcrypt-dev \
 		libtidy-dev \
 		libxslt-dev \
-		zlib1g-dev \
-		libicu-dev \
-		g++ \
 		openssh-client \
-		libmagickwand-dev \
 		unzip \
+		x-fonts-75dpi \
+		xfonts-base \
 		zip \
+		zlib1g-dev \
 	--no-install-recommends && \
 	curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && \
 	pecl install xdebug && \
 	pecl install imagick-3.4.3 && \
 	apt-get autoremove -y && \
-rm -r /var/lib/apt/lists/*
+	rm -r /var/lib/apt/lists/* && \
+	cd /root && \
+    wget https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.jessie_amd64.deb && \
+    dpkg -i wkhtmltox_0.12.5-1.jessie_amd64.deb
 
 # Install PHP Extensions
 RUN docker-php-ext-configure intl && \
