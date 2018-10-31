@@ -17,7 +17,7 @@ RUN apt-get update -y && apt-get install -y \
 		libxslt-dev \
 		openssh-client \
 		unzip \
-		x-fonts-75dpi \
+		xfonts-75dpi \
 		xfonts-base \
 		zip \
 		zlib1g-dev \
