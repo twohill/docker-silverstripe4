@@ -28,8 +28,8 @@ RUN apt-get update -y && apt-get install -y \
 	apt-get autoremove -y && \
 	rm -r /var/lib/apt/lists/* && \
 	cd /root && \
-    wget https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.jessie_amd64.deb && \
-    dpkg -i wkhtmltox_0.12.5-1.jessie_amd64.deb
+    curl -LSs https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb -o wkhtmltox_0.12.5-1.stretch_amd64.deb && \
+    dpkg -i wkhtmltox_0.12.5-1.stretch_amd64.deb
 
 # Install PHP Extensions
 RUN docker-php-ext-configure intl && \
