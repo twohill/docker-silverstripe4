@@ -15,6 +15,7 @@ RUN apt-get update -y && apt-get install -y \
 		libmcrypt-dev \
 		libtidy-dev \
 		libxslt-dev \
+		libzip-dev \
 		openssh-client \
 		unzip \
 		xfonts-75dpi \
@@ -39,11 +40,7 @@ RUN docker-php-ext-configure intl && \
 	docker-php-ext-enable xdebug && \
 	docker-php-ext-enable imagick && \
 	sed -i '1 a xdebug.remote_autostart=0' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-        sed -i '1 a xdebug.remote_mode=req' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-        sed -i '1 a xdebug.remote_handler=dbgp' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
         sed -i '1 a xdebug.remote_connect_back=0 ' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-        sed -i '1 a xdebug.remote_port=9000' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-        sed -i '1 a xdebug.remote_host=127.0.0.1' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
         sed -i '1 a xdebug.remote_enable=1' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
 	docker-php-ext-install -j$(nproc) \
 		intl \
