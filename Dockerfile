@@ -29,8 +29,8 @@ RUN apt-get update -y && apt-get install -y \
 	apt-get autoremove -y && \
 	rm -r /var/lib/apt/lists/* && \
 	cd /root && \
-    curl -LSs https://downloads.wkhtmltopdf.org/0.12/0.12.5/wkhtmltox_0.12.5-1.stretch_amd64.deb -o wkhtmltox_0.12.5-1.stretch_amd64.deb && \
-    dpkg -i wkhtmltox_0.12.5-1.stretch_amd64.deb
+    curl -LSs https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.stretch_amd64.deb -o wkhtmltox_0.12.6-1.stretch_amd64.deb && \
+    dpkg -i wkhtmltox_0.12.6-1.stretch_amd64.deb
 
 # Install PHP Extensions
 RUN docker-php-ext-configure intl && \
@@ -39,9 +39,9 @@ RUN docker-php-ext-configure intl && \
 	docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
 	docker-php-ext-enable xdebug && \
 	docker-php-ext-enable imagick && \
-	sed -i '1 a xdebug.remote_autostart=0' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-        sed -i '1 a xdebug.remote_connect_back=0 ' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
-        sed -i '1 a xdebug.remote_enable=1' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+	sed -i '1 a xdebug.mode=debug' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+	sed -i '1 a xdebug.start_with_request=trigger' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+	sed -i '1 a xdebug.discover_client_host=true' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
 	docker-php-ext-install -j$(nproc) \
 		intl \
 		gd \
