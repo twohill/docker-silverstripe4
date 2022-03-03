@@ -3,25 +3,29 @@ LABEL author="Al Twohill <al@twohill.nz>"
 
 # Install components
 RUN apt-get update -y && apt-get install -y \
-		curl \
-		g++ \
-		git-core \
-		gzip \
-		libcurl4-openssl-dev \
-		libgd-dev \
-		libldap2-dev \
-		libicu-dev \
-		libmagickwand-dev \
-		libmcrypt-dev \
-		libtidy-dev \
-		libxslt-dev \
-		libzip-dev \
-		openssh-client \
-		unzip \
-		xfonts-75dpi \
-		xfonts-base \
-		zip \
-		zlib1g-dev \
+	autoconf \
+	automake \
+	curl \
+	g++ \
+	git-core \
+	gzip \
+	libcurl4-openssl-dev \
+	libgd-dev \
+	libldap2-dev \
+	libicu-dev \
+	libmagickwand-dev \
+	libmcrypt-dev \
+	libtool \
+	libtidy-dev \
+	libxslt-dev \
+	libzip-dev \
+	openssh-client \
+	pkg-config \
+	unzip \
+	xfonts-75dpi \
+	xfonts-base \
+	zip \
+	zlib1g-dev \
 	--no-install-recommends && \
 	curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && \
 	pecl install xdebug && \
@@ -29,8 +33,10 @@ RUN apt-get update -y && apt-get install -y \
 	apt-get autoremove -y && \
 	rm -r /var/lib/apt/lists/* && \
 	cd /root && \
-    curl -LSs https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.stretch_amd64.deb -o wkhtmltox_0.12.6-1.stretch_amd64.deb && \
-    dpkg -i wkhtmltox_0.12.6-1.stretch_amd64.deb
+	curl -LSs https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.stretch_amd64.deb -o wkhtmltox_0.12.6-1.stretch_amd64.deb && \
+	dpkg -i wkhtmltox_0.12.6-1.stretch_amd64.deb
+
+
 
 # Install PHP Extensions
 RUN docker-php-ext-configure intl && \
@@ -43,38 +49,40 @@ RUN docker-php-ext-configure intl && \
 	sed -i '1 a xdebug.start_with_request=trigger' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
 	sed -i '1 a xdebug.discover_client_host=true' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
 	docker-php-ext-install -j$(nproc) \
-		intl \
-		gd \
-		ldap \
-		mysqli \
-		pdo \
-		pdo_mysql \
-		soap \
-		tidy \
-		xsl \
-		zip
+	exif \
+	intl \
+	gd \
+	ldap \
+	mbstring \
+	mysqli \
+	pdo \
+	pdo_mysql \
+	soap \
+	tidy \
+	xsl \
+	zip
 
 # Apache + xdebug configuration
 RUN { \
-                echo "<VirtualHost *:80>"; \
-                echo "  DocumentRoot /var/www/html/public"; \
-                echo "  LogLevel warn"; \
-                echo "  ErrorLog /var/log/apache2/error.log"; \
-                echo "  CustomLog /var/log/apache2/access.log combined"; \
-                echo "  ServerSignature Off"; \
-                echo "  <Directory /var/www/html/public/>"; \
-                echo "    Options +FollowSymLinks"; \
-                echo "    Options -ExecCGI -Includes -Indexes"; \
-                echo "    AllowOverride all"; \
-                echo; \
-                echo "    Require all granted"; \
-                echo "  </Directory>"; \
-                echo "  <LocationMatch assets/>"; \
-                echo "    php_flag engine off"; \
-                echo "  </LocationMatch>"; \
-                echo; \
-                echo "  IncludeOptional sites-available/000-default.local*"; \
-                echo "</VirtualHost>"; \
+	echo "<VirtualHost *:80>"; \
+	echo "  DocumentRoot /var/www/html/public"; \
+	echo "  LogLevel warn"; \
+	echo "  ErrorLog /var/log/apache2/error.log"; \
+	echo "  CustomLog /var/log/apache2/access.log combined"; \
+	echo "  ServerSignature Off"; \
+	echo "  <Directory /var/www/html/public/>"; \
+	echo "    Options +FollowSymLinks"; \
+	echo "    Options -ExecCGI -Includes -Indexes"; \
+	echo "    AllowOverride all"; \
+	echo; \
+	echo "    Require all granted"; \
+	echo "  </Directory>"; \
+	echo "  <LocationMatch assets/>"; \
+	echo "    php_flag engine off"; \
+	echo "  </LocationMatch>"; \
+	echo; \
+	echo "  IncludeOptional sites-available/000-default.local*"; \
+	echo "</VirtualHost>"; \
 	} | tee /etc/apache2/sites-available/000-default.conf
 
 RUN echo "ServerName localhost" > /etc/apache2/conf-available/fqdn.conf && \
