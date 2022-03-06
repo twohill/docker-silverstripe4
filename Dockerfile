@@ -1,4 +1,4 @@
-FROM php:7-apache-stretch
+FROM php:8.1-apache-buster
 LABEL author="Al Twohill <al@twohill.nz>"
 
 # Install components
@@ -11,6 +11,7 @@ RUN apt-get update -y && apt-get install -y \
 	gzip \
 	libcurl4-openssl-dev \
 	libgd-dev \
+	libonig-dev \
 	libldap2-dev \
 	libicu-dev \
 	libmagickwand-dev \
@@ -29,12 +30,12 @@ RUN apt-get update -y && apt-get install -y \
 	--no-install-recommends && \
 	curl -sS https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer && \
 	pecl install xdebug && \
-	pecl install imagick-3.4.3 && \
+	pecl install imagick && \
 	apt-get autoremove -y && \
 	rm -r /var/lib/apt/lists/* && \
 	cd /root && \
-	curl -LSs https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.stretch_amd64.deb -o wkhtmltox_0.12.6-1.stretch_amd64.deb && \
-	dpkg -i wkhtmltox_0.12.6-1.stretch_amd64.deb
+	curl -LSs https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.buster_amd64.deb -o wkhtmltox_0.12.6-1.buster_amd64.deb && \
+	dpkg -i wkhtmltox_0.12.6-1.buster_amd64.deb
 
 
 
@@ -42,7 +43,7 @@ RUN apt-get update -y && apt-get install -y \
 RUN docker-php-ext-configure intl && \
 	docker-php-ext-configure mysqli --with-mysqli=mysqlnd && \
 	docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
-	docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+	docker-php-ext-configure gd && \
 	docker-php-ext-enable xdebug && \
 	docker-php-ext-enable imagick && \
 	sed -i '1 a xdebug.mode=debug' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
