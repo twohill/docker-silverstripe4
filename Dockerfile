@@ -43,7 +43,7 @@ RUN apt-get update -y && apt-get install -y \
 RUN docker-php-ext-configure intl && \
 	docker-php-ext-configure mysqli --with-mysqli=mysqlnd && \
 	docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
-	docker-php-ext-configure gd && \
+	docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg && \
 	docker-php-ext-enable xdebug && \
 	docker-php-ext-enable imagick && \
 	sed -i '1 a xdebug.mode=debug' /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
@@ -91,6 +91,6 @@ RUN echo "ServerName localhost" > /etc/apache2/conf-available/fqdn.conf && \
 	a2enmod rewrite expires remoteip cgid && \
 	usermod -u 1000 www-data && \
 	usermod -G staff www-data
-
+RUN echo 'memory_limit = 2048M' >> /usr/local/etc/php/conf.d/docker-php-memlimit.ini;
 EXPOSE 80
 CMD ["apache2-foreground"]
